@@ -1,0 +1,33 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "NodeNext",
+		"lib": ["ES2022", "DOM"],
+		"types": ["node"],
+
+		/* Building */
+		"moduleResolution": "NodeNext",
+		"moduleDetection": "force",
+		"jsx": "react-jsx",
+		"jsxImportSource": "hono/jsx",
+		"esModuleInterop": true,
+		"useDefineForClassFields": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"sourceMap": true,
+		"declaration": false,
+		"outDir": "./dist",
+
+		/* Linting */
+		"strict": true,
+		"skipLibCheck": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"verbatimModuleSyntax": true
+	},
+	"include": ["src"],
+	"exclude": ["**/node_modules/**", "dist"]
+}

@@ -16,7 +16,11 @@ export const listRouter = new Hono()
 		let tasks;
 
 		try {
-			tasks = await todoist.getTasks({ filter });
+			tasks = (await todoist.getTasks({ filter })).sort((a, b) => {
+				const date1 = a.due?.datetime ?? a.due?.date ?? '9999';
+				const date2 = b.due?.datetime ?? b.due?.date ?? '9999';
+				return date1.localeCompare(date2);
+			});
 		} catch (err) {
 			const errorMessage = 'Failed to fetch tasks from Todoist';
 			const todoistMessage = getTodoistErrorMessage(err);

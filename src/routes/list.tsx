@@ -1,8 +1,7 @@
 import { Hono } from 'hono';
 import { getTodoistErrorMessage, todoist } from '../apis/todoist.js';
 import { GlanceStylesheet } from '../apis/glance.js';
-import { css, Style } from 'hono/css';
-import { html } from 'hono/html';
+import { css, Style as HonoStylesheet } from 'hono/css';
 
 export const listRouter = new Hono()
 	.get('/', async (c) => {
@@ -57,36 +56,24 @@ export const listRouter = new Hono()
 			}
 		`;
 
-		const checkJs = html`
-			<script>
-				async function todoistCompleteTask(taskElement) {
-					const { endpoint, taskId } = taskElement.dataset;
-					const reqUrl = new URL(endpoint);
-					reqUrl.searchParams.set('taskId', taskId);
-					await fetch(reqUrl, { method: 'post' });
-					taskElement.parentElement.remove();
-				}
-			</script>
-		`;
-
 		return c.html(
 			<>
 				<GlanceStylesheet />
-				<Style />
-				{checkJs}
+				<HonoStylesheet />
 				<ul class="list list-gap-10 list-with-separator">
 					{tasks.map((task) => (
-						<li class="flex items-center">
-							<button
-								type="button"
-								class={checkClass}
-								data-endpoint={endpoint}
-								data-task-id={task.id}
-								onclick="todoistCompleteTask(this)"
-							></button>
-							<a href={task.url} class="grow">
-								{task.content}
-							</a>
+						<li>
+							<form action={endpoint} method="post" class="flex items-center">
+								<button
+									type="submit"
+									name="taskId"
+									value={task.id}
+									class={checkClass}
+								></button>
+								<a href={task.url} class="grow">
+									{task.content}
+								</a>
+							</form>
 						</li>
 					))}
 				</ul>
@@ -94,7 +81,9 @@ export const listRouter = new Hono()
 		);
 	})
 	.post('/', async (c) => {
-		const taskId = c.req.query('taskId');
+		const form = await c.req.formData();
+		const taskId = form.get('taskId')?.toString();
+		const returnTo = c.req.header('referer');
 
 		if (!taskId) {
 			throw new Error('No Todoist task ID specified');
@@ -102,5 +91,9 @@ export const listRouter = new Hono()
 
 		await todoist.closeTask(taskId);
 
-		return c.text('');
+		if (returnTo) {
+			return c.redirect(returnTo);
+		}
+
+		return c.text(`Marked task completed: ${taskId}`);
 	});

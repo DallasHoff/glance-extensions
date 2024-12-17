@@ -80,6 +80,11 @@ export const listRouter = new Hono()
 							</form>
 						</li>
 					))}
+					{tasks.length === 0 && (
+						<li>
+							<p>No Tasks</p>
+						</li>
+					)}
 				</ul>
 			</>
 		);

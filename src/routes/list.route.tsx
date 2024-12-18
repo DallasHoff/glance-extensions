@@ -1,12 +1,18 @@
 import { Hono } from 'hono';
 import type { Task } from '@doist/todoist-api-typescript';
 import type { Context } from '../context.js';
-import { getTodoistErrorMessage, todoist } from '../apis/todoist.api.js';
+import {
+	getTodoistErrorMessage,
+	sortTasksByDate,
+} from '../utils/todoist.util.js';
 import { GlanceError } from '../components/glance-error.component.js';
 import { GlanceTodoList } from '../components/glance-todo-list.component.js';
+import { todoistMiddleware } from '../middleware/todoist.middleware.js';
 
 export const listRouter = new Hono<Context>()
+	.use(todoistMiddleware)
 	.get('/', async (c) => {
+		const todoist = c.var.todoist;
 		const filter = c.req.query('filter') ?? 'today';
 		const { origin, pathname } = new URL(c.req.url);
 
@@ -17,16 +23,13 @@ export const listRouter = new Hono<Context>()
 		const completionEndpoint = origin + pathname;
 
 		try {
-			tasks = (await todoist.getTasks({ filter })).sort((a, b) => {
-				const date1 = a.due?.datetime ?? a.due?.date ?? '9999';
-				const date2 = b.due?.datetime ?? b.due?.date ?? '9999';
-				return date1.localeCompare(date2);
-			});
+			const tasksData = await todoist.getTasks({ filter });
+			tasks = sortTasksByDate(tasksData);
 		} catch (err) {
 			const errorMessage = 'Failed to fetch tasks from Todoist';
 			const todoistMessage = getTodoistErrorMessage(err);
-			const text = `${errorMessage}${todoistMessage ? `: ${todoistMessage}` : ''}`;
-			return c.html(<GlanceError>{text}</GlanceError>);
+			const error = `${errorMessage}${todoistMessage ? `: ${todoistMessage}` : ''}`;
+			return c.html(<GlanceError>{error}</GlanceError>);
 		}
 
 		return c.html(
@@ -34,12 +37,14 @@ export const listRouter = new Hono<Context>()
 		);
 	})
 	.post('/', async (c) => {
+		const todoist = c.var.todoist;
 		const form = await c.req.formData();
 		const taskId = form.get('taskId')?.toString();
 		const returnTo = c.req.header('referer');
 
 		if (!taskId) {
-			throw new Error('No Todoist task ID specified');
+			const error = 'No Todoist task ID specified';
+			return c.html(<GlanceError>{error}</GlanceError>, 400);
 		}
 
 		await todoist.closeTask(taskId);
@@ -48,5 +53,5 @@ export const listRouter = new Hono<Context>()
 			return c.redirect(returnTo);
 		}
 
-		return c.text(`Marked task completed: ${taskId}`);
+		return c.html(<p>Marked task completed: {taskId}</p>);
 	});

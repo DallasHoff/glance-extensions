@@ -2,26 +2,16 @@
 
 An extension for displaying Todoist tasks in [Glance](https://github.com/glanceapp/glance) dashboards
 
-## Environment Variables
-
-| Name          | Type   | Required | Default |
-| ------------- | ------ | -------- | ------- |
-| TODOIST_TOKEN | string | yes      |         |
-| PORT          | number | no       | 8080    |
-
-### `TODOIST_TOKEN`
-
-Your [Todoist API token](https://todoist.com/help/articles/find-your-api-token-Jpzx9IIlB).
-
-### `PORT`
-
-The port from which to serve this extension.
-
 ## Properties
 
 | Name   | Type   | Required | Default |
 | ------ | ------ | -------- | ------- |
+| token  | string | yes      |         |
 | filter | string | no       | today   |
+
+### `token`
+
+Your [Todoist API token](https://todoist.com/help/articles/find-your-api-token-Jpzx9IIlB).
 
 ### `filter`
 

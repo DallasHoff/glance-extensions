@@ -1,7 +1,5 @@
 import type { FC } from 'hono/jsx';
-
-export const glanceCssUrl =
-	'https://cdn.jsdelivr.net/gh/glanceapp/glance/internal/assets/static/main.css';
+import { glanceCssUrl } from '../apis/glance.api.js';
 
 export const GlanceStylesheet: FC = () => {
 	return (

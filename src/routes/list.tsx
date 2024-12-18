@@ -37,6 +37,7 @@ export const listRouter = new Hono()
 		const checkClass = css`
 			& {
 				appearance: none;
+				flex-shrink: 0;
 				display: flex;
 				align-items: center;
 				justify-content: center;

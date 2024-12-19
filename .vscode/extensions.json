@@ -1,0 +1,4 @@
+{
+	"recommendations": ["esbenp.prettier-vscode", "bashmish.es6-string-css"],
+	"unwantedRecommendations": []
+}

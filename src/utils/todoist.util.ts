@@ -1,12 +1,17 @@
 import type { Task } from '@doist/todoist-api-typescript';
 
-export function getTodoistErrorMessage(err: unknown): string | null {
-	return typeof err === 'object' &&
+export function getTodoistErrorMessage(
+	intro: string,
+	err: unknown
+): string | null {
+	const responseMessage =
+		typeof err === 'object' &&
 		err !== null &&
 		'responseData' in err &&
 		typeof err.responseData === 'string'
-		? err.responseData
-		: null;
+			? err.responseData
+			: null;
+	return `${intro}${responseMessage ? `: ${responseMessage}` : ''}`;
 }
 
 export function sortTasksByDate(tasks: Task[]): Task[] {

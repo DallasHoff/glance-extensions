@@ -9,7 +9,7 @@ import { GlanceError } from '../components/glance-error.component.js';
 import { GlanceTodoList } from '../components/glance-todo-list.component.js';
 import { todoistMiddleware } from '../middleware/todoist.middleware.js';
 
-export const listRouter = new Hono<Context>()
+export const todoistRouter = new Hono<Context>()
 	.use(todoistMiddleware)
 	.get('/', async (c) => {
 		const todoist = c.var.todoist;
@@ -26,9 +26,8 @@ export const listRouter = new Hono<Context>()
 			const tasksData = await todoist.getTasks({ filter });
 			tasks = sortTasksByDate(tasksData);
 		} catch (err) {
-			const errorMessage = 'Failed to fetch tasks from Todoist';
-			const todoistMessage = getTodoistErrorMessage(err);
-			const error = `${errorMessage}${todoistMessage ? `: ${todoistMessage}` : ''}`;
+			const intro = 'Failed to fetch tasks from Todoist';
+			const error = getTodoistErrorMessage(intro, err);
 			return c.html(<GlanceError>{error}</GlanceError>);
 		}
 

@@ -2,13 +2,13 @@ import 'dotenv/config';
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import type { Context } from './context.js';
-import { listRouter } from './routes/list.route.js';
+import { todoistRouter } from './routes/todoist.route.js';
 
 const app = new Hono<Context>();
 const fetch = app.fetch;
 const port = parseInt(process.env.PORT ?? '8080');
 
-app.route('/list', listRouter);
+app.route('/todoist', todoistRouter);
 
 const server = serve({ fetch, port });
 console.log(`Server is running on http://localhost:${port}`);

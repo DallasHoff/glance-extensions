@@ -1,5 +1,6 @@
 {
-	"name": "glance-todoist",
+	"name": "glance-extensions",
+	"private": true,
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
@@ -19,11 +20,6 @@
 		"tsx": "^4.19.2",
 		"typescript": "^5.7.2"
 	},
-	"description": "An extension for displaying Todoist tasks in Glance dashboards",
 	"author": "Dallas Hoffman",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/DallasHoff/glance-todoist.git"
-	}
+	"license": "MIT"
 }

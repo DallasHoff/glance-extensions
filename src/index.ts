@@ -1,14 +1,16 @@
 import 'dotenv/config';
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
-import type { Context } from './context.js';
+import type { AppContext } from './context.js';
 import { todoistRouter } from './routes/todoist.route.js';
 import { tubeArchivistRouter } from './routes/tubearchivist.route.js';
+import { envMiddleware } from './middleware/env.middleware.js';
 
-const app = new Hono<Context>();
+const app = new Hono<AppContext>();
 const fetch = app.fetch;
 const port = parseInt(process.env.PORT ?? '8080');
 
+app.use(envMiddleware);
 app.route('/todoist', todoistRouter);
 app.route('/tubearchivist', tubeArchivistRouter);
 

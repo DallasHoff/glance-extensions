@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import type { Task } from '@doist/todoist-api-typescript';
-import type { Context } from '../context.js';
+import type { AppContext } from '../context.js';
 import {
 	getTodoistErrorMessage,
 	sortTasksByDate,
@@ -9,7 +9,7 @@ import { GlanceError } from '../components/glance-error.component.js';
 import { GlanceTodoList } from '../components/glance-todo-list.component.js';
 import { todoistMiddleware } from '../middleware/todoist.middleware.js';
 
-export const todoistRouter = new Hono<Context>()
+export const todoistRouter = new Hono<AppContext>()
 	.use(todoistMiddleware)
 	.get('/', async (c) => {
 		const todoist = c.var.todoist;

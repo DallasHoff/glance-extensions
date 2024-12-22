@@ -1,18 +1,24 @@
 import { createMiddleware } from 'hono/factory';
 import { GlanceError } from '../components/glance-error.component.js';
+import type { AppContext } from '../context.js';
 
-export const tubeArchivistMiddleware = createMiddleware<{
+export type TubeArchivistContext = {
 	Variables: {
 		taHost: string;
 		taToken: string;
+		taHeaders: { Authorization: `Token ${string}` };
 	};
-}>(async (c, next) => {
+};
+
+export const tubeArchivistMiddleware = createMiddleware<
+	AppContext & TubeArchivistContext
+>(async (c, next) => {
 	const queryHost = c.req.query('host');
-	const envHost = process.env.TA_HOST;
+	const envHost = c.var.env.TA_HOST;
 	const host = queryHost || envHost;
 
 	const queryToken = c.req.query('token');
-	const envToken = process.env.TA_TOKEN;
+	const envToken = c.var.env.TA_TOKEN;
 	const token = queryToken || envToken;
 
 	if (!host || !token) {
@@ -23,5 +29,6 @@ export const tubeArchivistMiddleware = createMiddleware<{
 
 	c.set('taHost', host);
 	c.set('taToken', token);
+	c.set('taHeaders', { Authorization: `Token ${token}` });
 	await next();
 });

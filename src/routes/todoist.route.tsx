@@ -23,6 +23,8 @@ export const todoistRouter = new Hono<AppContext>()
 		completionUrl.search = '';
 		const completionEndpoint = completionUrl.toString();
 
+		console.log(completionUrl);
+
 		try {
 			const tasksData = await todoist.getTasks({ filter });
 			tasks = sortTasksByDate(tasksData);

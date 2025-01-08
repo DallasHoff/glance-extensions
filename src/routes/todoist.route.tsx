@@ -14,13 +14,14 @@ export const todoistRouter = new Hono<AppContext>()
 	.get('/', async (c) => {
 		const todoist = c.var.todoist;
 		const filter = c.req.query('filter') ?? 'today';
-		const { origin, pathname } = new URL(c.req.url);
 
 		c.header('Widget-Title', 'Todoist');
 		c.header('Widget-Content-Type', 'html');
 
 		let tasks: Task[];
-		const completionEndpoint = origin + pathname;
+		const completionUrl = new URL(c.req.url);
+		completionUrl.search = '';
+		const completionEndpoint = completionUrl.toString();
 
 		try {
 			const tasksData = await todoist.getTasks({ filter });

@@ -21,9 +21,7 @@ export const todoistRouter = new Hono<AppContext>()
 		let tasks: Task[];
 		const completionUrl = new URL(c.req.url);
 		completionUrl.search = '';
-		const completionEndpoint = completionUrl.toString();
-
-		console.log(completionUrl);
+		const completionEndpoint = completionUrl.toString().replace(/^https?:/, '');
 
 		try {
 			const tasksData = await todoist.getTasks({ filter });

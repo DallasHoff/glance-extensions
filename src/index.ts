@@ -10,7 +10,9 @@ import { prometheus } from '@hono/prometheus';
 const app = new Hono<AppContext>();
 const fetch = app.fetch;
 const port = parseInt(process.env.PORT ?? '8080');
-const { printMetrics, registerMetrics } = prometheus();
+const { printMetrics, registerMetrics } = prometheus({
+	prefix: 'glance_extensions_',
+});
 
 app.use(registerMetrics);
 app.use(envMiddleware);

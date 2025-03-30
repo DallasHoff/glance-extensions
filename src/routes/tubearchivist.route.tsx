@@ -25,7 +25,11 @@ export const tubeArchivistRouter = new Hono<AppContext>()
 		let videos: GlanceVideo[] = [];
 
 		try {
-			const videosRes = await fetch(`${host}/api/video/`, { headers });
+			const url = new URL(`${host}/api/video/`);
+			url.searchParams.set('sort', 'downloaded');
+			url.searchParams.set('order', 'desc');
+			url.searchParams.set('watch', 'unwatched');
+			const videosRes = await fetch(url, { headers });
 			const videosData = await videosRes.json();
 			if (!videosData.data) throw videosData;
 			videos = videosData.data.map((vid: any) => convertTaVideo(c, vid));

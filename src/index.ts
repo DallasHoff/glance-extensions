@@ -6,6 +6,7 @@ import { todoistRouter } from './routes/todoist.route.js';
 import { tubeArchivistRouter } from './routes/tubearchivist.route.js';
 import { envMiddleware } from './middleware/env.middleware.js';
 import { prometheus } from '@hono/prometheus';
+import { changeDetectionRouter } from './routes/changedetection.route.js';
 
 const app = new Hono<AppContext>();
 const fetch = app.fetch;
@@ -20,6 +21,7 @@ app.use(envMiddleware);
 app.get('/metrics', printMetrics);
 app.route('/todoist', todoistRouter);
 app.route('/tubearchivist', tubeArchivistRouter);
+app.route('/changedetection', changeDetectionRouter);
 
 const server = serve({ fetch, port });
 console.log(`Server is running on http://localhost:${port}`);

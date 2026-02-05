@@ -9,7 +9,7 @@
 		"start": "node dist/index.js"
 	},
 	"dependencies": {
-		"@doist/todoist-api-typescript": "^3.0.3",
+		"@doist/todoist-api-typescript": "^6.4.0",
 		"@hono/node-server": "^1.13.7",
 		"@hono/prometheus": "^1.0.1",
 		"dotenv": "^16.4.7",

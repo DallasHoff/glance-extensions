@@ -24,8 +24,8 @@ export const todoistRouter = new Hono<AppContext>()
 		const completionEndpoint = completionUrl.toString().replace(/^https?:/, '');
 
 		try {
-			const tasksData = await todoist.getTasks({ filter });
-			tasks = sortTasksByDate(tasksData);
+			const tasksData = await todoist.getTasksByFilter({ query: filter });
+			tasks = sortTasksByDate(tasksData.results);
 		} catch (err) {
 			const intro = 'Failed to fetch tasks from Todoist';
 			const error = getTodoistErrorMessage(intro, err);

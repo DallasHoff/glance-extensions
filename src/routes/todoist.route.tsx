@@ -27,6 +27,7 @@ export const todoistRouter = new Hono<AppContext>()
 			const tasksData = await todoist.getTasksByFilter({ query: filter });
 			tasks = sortTasksByDate(tasksData.results);
 		} catch (err) {
+			console.error(err);
 			const intro = 'Failed to fetch tasks from Todoist';
 			const error = getTodoistErrorMessage(intro, err);
 			return c.html(<GlanceError>{error}</GlanceError>);

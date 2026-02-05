@@ -20,6 +20,7 @@ export const changeDetectionRouter = new Hono<AppContext>()
 			const res = await fetch(url, { headers });
 			text = await res.text();
 		} catch (err) {
+			console.error(err);
 			const errMessage = err instanceof Error ? err.message : err;
 			const error = `Failed to fetch text from Change Detection: ${errMessage}`;
 			return c.html(<GlanceError>{error}</GlanceError>);

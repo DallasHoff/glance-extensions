@@ -34,6 +34,7 @@ export const tubeArchivistRouter = new Hono<AppContext>()
 			if (!videosData.data) throw videosData;
 			videos = videosData.data.map((vid: any) => convertTaVideo(c, vid));
 		} catch (err) {
+			console.error(err);
 			const intro = 'Failed to fetch videos from TubeArchivist';
 			const error = getTaErrorMessage(intro, err);
 			return c.html(<GlanceError>{error}</GlanceError>);
